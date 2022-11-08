@@ -152,7 +152,7 @@ ufo %>% select(year, state) %>%  na.omit() %>%
   theme_light() +
   labs(x = 'Year', y = 'UFO sightings') + 
   ggtitle('UFO sightings in the USA from 1969 to 2022') +
-  scale_x_continuous(breaks = seq(1969, 2022 5)) + 
+  scale_x_continuous(breaks = seq(1969, 2022, 5)) + 
   scale_color_discrete(name = 'State') + ylim(0, 900)
 
 ufo %>% select(year, state) %>%  na.omit() %>% 
