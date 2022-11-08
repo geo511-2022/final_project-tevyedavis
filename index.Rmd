@@ -8,6 +8,8 @@ subtitle: Subtitle here if desired
 
 [~ 200 words]
 
+An unidentified flying object (UFO), recently renamed as a UAP (unidentified aerial phenomenon) is any perceived aerial phenomenon that cannot be immediately identified or explained. There have been several studies of UAPs carried out by various US government agencies, including a Pentagon report that was declassified in June 2021. The US House of Representatives recently voted to encourage the sharing of more UFO sightings by adopting a bipartisan amendment to the National Defense Authorization Act. The aim of this study is to create a map depicting the number of sightings of UAP per state and identify if there is a cluster of UAP sightings. 
+
 Clearly stated background and questions / hypotheses / problems being addressed. Sets up the analysis in an interesting and compelling way.
 
 # Materials and methods
