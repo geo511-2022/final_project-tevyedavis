@@ -63,22 +63,28 @@ knitr::opts_chunk$set(cache=TRUE)  # cache the results for quick compiling
 
 ## Download and clean all required data
 ```{r}
-n=20
-data=data.frame(x=runif(n,-180,180),
-                y=runif(n,-60,60),
-                size = runif(n, 5, 20),
-                category = factor(
-                  sample(letters[1:5], n, replace = TRUE)
-                  ),
-                value = rnorm(n))
+ufo = read_csv('https://query.data.world/s/6xru2x6vjkjgz5ck52invxt3j7mc5w')
+
+US_map = states(cb = T)
+US_map = as(US_map, 'sf')
+```
+
+```{r, message = FALSE, warning = FALSE, eval = F}
+US_map = states(cb = T)
+US_map = as(US_map, 'sf')
 ```
 
 ```{r, results='asis'}
-data %>% 
-  slice(1:10) %>% #show only 1:n rows
-  kable(digits=2,align="c")%>% #make table and round to two digits
-  kable_styling(bootstrap_options = 
-                  c("striped", "hover", "condensed", "responsive")) #apply other formatting
+us_states = c('AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL',
+              'GA', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA',
+              'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE',
+              'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK',
+              'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT',
+              'VA', 'WA', 'WV', 'WI', 'WY', 'DC')
+
+US_map = US_map %>% filter(STUSPS %in% us_states)
+
+
 ```
 
 Add any additional processing steps here.
@@ -92,18 +98,146 @@ Tables and figures (maps and other graphics) are carefully planned to convey the
 Show tables, plots, etc. and describe them.
 
 ```{r, fig.width=6, fig.height=3, fig.cap="Map of completely random data"}
-m <- leaflet(data) %>% 
-  addTiles() %>% 
-  addCircleMarkers(~x, ~y, radius = ~size,color = ~as.factor(category)) %>% 
-  addPopups(~x[2], ~y[2], "Random popup")
-m  # a map with the default OSM tile layer
+US_ufo = ufo %>% filter(state %in% us_states) %>% group_by(state) %>% summarize(n = n()) 
+
+US_map = left_join(US_map, US_ufo, by = c("STUSPS" = 'state'))
+
+US_map %>% 
+  ggplot() +
+  geom_col(aes(x = fct_reorder(STUSPS, n), y = n)) + coord_flip() +
+  theme_light() +
+  labs(x = 'Number of UFOs', y = 'State') +
+  geom_text(aes(x = fct_reorder(STUSPS, n), y = n, label = n), nudge_y = 350, size = 3.5) +
+  ggtitle('Number of UFOs per State')
 ```
 
 
 ```{r}
-data %>% 
-  ggplot(aes(x=x,y=y,col=category))+
-  geom_point()
+ufo$year = year(ufo$date_time)
+ufo %>% select(year, state) %>%  na.omit() %>% 
+  group_by(year, state) %>% 
+  summarize(n = n()) %>% ungroup() %>% 
+  group_by(year) %>% summarize(tot_ufos = sum(n)) %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = tot_ufos)) +
+  geom_point(aes(x = year, y = tot_ufos)) +
+  theme_light() +
+  labs(x = 'Year', y = 'UFO sightings') + 
+  ggtitle('UFO sightings in the USA from 1969 to 2022') +
+  scale_x_continuous(breaks = seq(1969, 2022, 5))
+
+
+ufo %>% select(year, state) %>%  na.omit() %>% 
+  filter(state %in% us_states[1:10]) %>% 
+  group_by(year, state) %>% 
+  summarize(n = n()) %>% ungroup() %>% 
+  group_by(year, state) %>% summarize(tot_ufos = sum(n)) %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = tot_ufos, color = state)) +
+  geom_point(aes(x = year, y = tot_ufos, color = state)) +
+  theme_light() +
+  labs(x = 'Year', y = 'UFO sightings') + 
+  ggtitle('UFO sightings in the USA from 1969 to 2022') +
+  scale_x_continuous(breaks = seq(1969, 2022, 5)) +
+  scale_color_discrete(name = 'State') + ylim(0, 900)
+
+ufo %>% select(year, state) %>%  na.omit() %>% 
+  filter(state %in% us_states[11:20]) %>% 
+  group_by(year, state) %>% 
+  summarize(n = n()) %>% ungroup() %>% 
+  group_by(year, state) %>% summarize(tot_ufos = sum(n)) %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = tot_ufos, color = state)) +
+  geom_point(aes(x = year, y = tot_ufos, color = state)) +
+  theme_light() +
+  labs(x = 'Year', y = 'UFO sightings') + 
+  ggtitle('UFO sightings in the USA from 1969 to 2022') +
+  scale_x_continuous(breaks = seq(1969, 2022 5)) + 
+  scale_color_discrete(name = 'State') + ylim(0, 900)
+
+ufo %>% select(year, state) %>%  na.omit() %>% 
+  filter(state %in% us_states[21:30]) %>% 
+  group_by(year, state) %>% 
+  summarize(n = n()) %>% ungroup() %>% 
+  group_by(year, state) %>% summarize(tot_ufos = sum(n)) %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = tot_ufos, color = state)) +
+  geom_point(aes(x = year, y = tot_ufos, color = state)) +
+  theme_light() +
+  labs(x = 'Year', y = 'UFO sightings') + 
+  ggtitle('UFO sightings in the USA from 1969 to 2022') +
+  scale_x_continuous(breaks = seq(1969, 2022, 5)) + 
+  scale_color_discrete(name = 'State') + ylim(0, 900)
+
+ufo %>% select(year, state) %>%  na.omit() %>% 
+  filter(state %in% us_states[31:40]) %>% 
+  group_by(year, state) %>% 
+  summarize(n = n()) %>% ungroup() %>% 
+  group_by(year, state) %>% summarize(tot_ufos = sum(n)) %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = tot_ufos, color = state)) +
+  geom_point(aes(x = year, y = tot_ufos, color = state)) +
+  theme_light() +
+  labs(x = 'Year', y = 'UFO sightings') + 
+  ggtitle('UFO sightings in the USA from 1969 to 2022') +
+  scale_x_continuous(breaks = seq(1969, 2022, 5)) + 
+  scale_color_discrete(name = 'State') + ylim(0, 900)
+
+ufo %>% select(year, state) %>%  na.omit() %>% 
+  filter(state %in% us_states[41:49]) %>% 
+  group_by(year, state) %>% 
+  summarize(n = n()) %>% ungroup() %>% 
+  group_by(year, state) %>% summarize(tot_ufos = sum(n)) %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = tot_ufos, color = state)) +
+  geom_point(aes(x = year, y = tot_ufos, color = state)) +
+  theme_light() +
+  labs(x = 'Year', y = 'UFO sightings') + 
+  ggtitle('UFO sightings in the USA from 1969 to 2022') +
+  scale_x_continuous(breaks = seq(1969, 2022, 5)) + 
+  scale_color_discrete(name = 'State') + ylim(0, 900)
+
+US_map_nb = poly2nb(US_map)
+US_map_listw = nb2listw(US_map_nb)
+
+US_coords = coordinates(as_Spatial(US_map)) %>% data.frame()
+
+neighborhood = as(spdep::nb2lines(US_map_nb, coords = coordinates(as_Spatial(US_map))), 'sf')
+neighborhood = sf::st_set_crs(neighborhood, sf::st_crs(US_map))
+
+ggplot(US_map) +
+  geom_sf(size = 1, color = 'gray', fill = 'white') +
+  geom_sf(data = neighborhood) +
+  geom_point(data = US_coords, aes(x = X1, y = X2), color = 'red') +
+  theme_light() +
+  ggtitle('Contiguous US neighborhood structure')
+
+
+labels <- sprintf(
+  "<strong>%s</strong><br/>%g ufos",
+  US_map$NAME, US_map$n
+) %>% lapply(htmltools::HTML)
+
+pal = colorBin('YlOrRd', domain = US_map$n, bins = quantile(US_map$n, c(seq(0,0.9, by = 0.1125), 1)))
+
+leaflet(US_map) %>% 
+  addPolygons(
+    fillColor = ~pal(n),
+    fillOpacity = 1, 
+    color = 'white',
+    weight = 2,
+    label = labels,
+    highlight = highlightOptions(
+      weight = 4,
+      color = 'black',
+      fillOpacity = 1,
+      bringToFront = TRUE)) %>%
+  addProviderTiles(providers$Esri.WorldStreetMap) %>% 
+  addLegend(pal = pal, values = ~n, opacity = 0.7, title = 'UFO Sightings: 1969 - 2022',
+            position = "bottomright")
+
+moran.mc(US_map$n, listw = US_map_listw, nsim = 9999)
+
 ```
 
 # Conclusions
