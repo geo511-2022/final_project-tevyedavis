@@ -18,6 +18,10 @@ Clearly stated background and questions / hypotheses / problems being addressed.
 
 Narrative: Clear narrative description of the data sources and methods. Includes data from at least two sources that were integrated / merged in R.
 
+Point locations of UAP/UFO sighings were from the National UFO Reporting Center. National UFO Reporting Center was founded in 1974 and has documented approximately 90,000 reported UFO sightings over its history mostly in the United States.
+
+The R Package ‘usmap’ was also used to obtain a contiguous map of United States.
+
 Code: The code associated with the project is well organized and easy to follow. Demonstrates mastery of R graphics and functions.
 
 Data: The underlying data are publicly accessible via the web and downloaded/accessed within the Rmd script. If you want to use your own data, you must make it available on a website (e.g. Figshare) so that others are able to re-run your code.
@@ -47,7 +51,13 @@ Load any required packages in a code chunk (you may need to install some package
 ```{r, message=F, warning=F}
 library(tidyverse)
 library(leaflet)
-library(kableExtra)
+library(htmltools)
+library(tigris)
+library(maptools)
+library(spdep)
+library(sf)
+library(lubridate)
+library(viridis)
 knitr::opts_chunk$set(cache=TRUE)  # cache the results for quick compiling
 ```
 
