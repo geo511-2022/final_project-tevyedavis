@@ -1,6 +1,6 @@
 ---
-title: "My Final Project Template"
-author: Your name here
+title: "Unidentified Aerial Phenomenon in America"
+author: Tev'ye davis
 subtitle: Subtitle here if desired
 ---
 
