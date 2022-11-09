@@ -6,21 +6,21 @@ subtitle: Subtitle here if desired
 
 # Introduction
 
-[~ 200 words]
+[\~ 200 words]
 
-An unidentified flying object (UFO), recently renamed as a UAP (unidentified aerial phenomenon) is any perceived aerial phenomenon that cannot be immediately identified or explained. There have been several studies of UAPs carried out by various US government agencies, including a Pentagon report that was declassified in June 2021. The US House of Representatives recently voted to encourage the sharing of more UFO sightings by adopting a bipartisan amendment to the National Defense Authorization Act. The aim of this study is to create a map depicting the number of sightings of UAP per state and identify if there is a cluster of UAP sightings. 
+An unidentified flying object (UFO), recently renamed as a UAP (unidentified aerial phenomenon) is any perceived aerial phenomenon that cannot be immediately identified or explained. There have been several studies of UAPs carried out by various US government agencies, including a Pentagon report that was declassified in June 2021. The US House of Representatives recently voted to encourage the sharing of more UFO sightings by adopting a bipartisan amendment to the National Defense Authorization Act. The aim of this study is to create a map depicting the number of sightings of UAP per state and identify if there is a cluster of UAP sightings.
 
 Clearly stated background and questions / hypotheses / problems being addressed. Sets up the analysis in an interesting and compelling way.
 
 # Materials and methods
 
-[~ 200 words]
+[\~ 200 words]
 
 Narrative: Clear narrative description of the data sources and methods. Includes data from at least two sources that were integrated / merged in R.
 
-Point locations of UAP/UFO sighings were from the National UFO Reporting Center. National UFO Reporting Center was founded in 1974 and has documented approximately 90,000 reported UFO sightings over its history mostly in the United States.
+Point locations of UAP/UFO sightings were from the National UFO Reporting Center. National UFO Reporting Center was founded in 1974 and has documented approximately 90,000 reported UFO sightings over its history mostly in the United States.
 
-The R Package ‘usmap’ was also used to obtain a contiguous map of United States.
+The R Package 'usmap' was also used to obtain a contiguous map of United States.
 
 Code: The code associated with the project is well organized and easy to follow. Demonstrates mastery of R graphics and functions.
 
@@ -28,23 +28,19 @@ Data: The underlying data are publicly accessible via the web and downloaded/acc
 
 You can do bullets like this:
 
-* The first most important thing
-* The second most important thing
-* The third most important thing
+-   The first most important thing
+-   The second most important thing
+-   The third most important thing
 
 You can do numbers like this:
 
-1. The first most important thing
-2. The second most important thing
-3. The third most important thing
+1.  The first most important thing
+2.  The second most important thing
+3.  The third most important thing
 
-See [http://rmarkdown.rstudio.com/](http://rmarkdown.rstudio.com/) for all the amazing things you can do.
-
+See <http://rmarkdown.rstudio.com/> for all the amazing things you can do.
 
 Here's my first code chunk.
-```{r}
-1+2
-```
 
 Load any required packages in a code chunk (you may need to install some packages):
 
@@ -62,7 +58,8 @@ knitr::opts_chunk$set(cache=TRUE)  # cache the results for quick compiling
 ```
 
 ## Download and clean all required data
-```{r}
+
+```{r, message=F, warning=F}
 ufo = read_csv('https://query.data.world/s/6xru2x6vjkjgz5ck52invxt3j7mc5w')
 
 US_map = states(cb = T)
@@ -91,7 +88,7 @@ Add any additional processing steps here.
 
 # Results
 
-[~200 words]
+[\~200 words]
 
 Tables and figures (maps and other graphics) are carefully planned to convey the results of your analysis. Intense exploration and evidence of many trials and failures. The author looked at the data in many different ways before coming to the final presentation of the data.
 
@@ -110,7 +107,6 @@ US_map %>%
   geom_text(aes(x = fct_reorder(STUSPS, n), y = n, label = n), nudge_y = 350, size = 3.5) +
   ggtitle('Number of UFOs per State')
 ```
-
 
 ```{r}
 ufo$year = year(ufo$date_time)
@@ -242,7 +238,7 @@ moran.mc(US_map$n, listw = US_map_listw, nsim = 9999)
 
 # Conclusions
 
-[~200 words]
+[\~200 words]
 
 Clear summary adequately describing the results and putting them in context. Discussion of further questions and ways to continue investigation.
 
