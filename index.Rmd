@@ -21,9 +21,11 @@ Here's my first code chunk.
 Load any required packages in a code chunk (you may need to install some packages):
 
 ```{r, message=F, warning=F}
-library(tidyvee)
+library(tidyverse)
 library(leaflet)
 library(htmltools)
+install.packages("tidycensus")
+library(tidycensus)
 install.packages("tigris")
 library(tigris)
 library(maptools)
