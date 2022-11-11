@@ -1,44 +1,20 @@
 ---
 title: "Unidentified Aerial Phenomenon in America"
 author: Tev'ye davis
-subtitle: Subtitle here if desired
+subtitle: 
 ---
 
 # Introduction
 
 [\~ 200 words]
 
-An unidentified flying object (UFO), recently renamed as a UAP (unidentified aerial phenomenon) is any perceived aerial phenomenon that cannot be immediately identified or explained. There have been several studies of UAPs carried out by various US government agencies, including a Pentagon report that was declassified in June 2021. The US House of Representatives recently voted to encourage the sharing of more UFO sightings by adopting a bipartisan amendment to the National Defense Authorization Act. The aim of this study is to create a map depicting the number of sightings of UAP per state and identify if there is a cluster of UAP sightings.
-
-Clearly stated background and questions / hypotheses / problems being addressed. Sets up the analysis in an interesting and compelling way.
+An unidentified flying object (UFO), recently renamed as a UAP (unidentified aerial phenomenon) are observations of events in the sky that cannot be identified as aircraft or as known natural phenomena. Understanding the data surrounding unidentified aerial phenomena is critical to helping us draw scientific conclusions about what is happening in the sky. Unidentified aerial phenomena are of interest, from a security and safety perspective. There have been several studies of UAPs carried out by various US government agencies, including a Pentagon report that was declassified in June 2021. The US House of Representatives recently voted to encourage the sharing of more UFO sightings by adopting a bipartisan amendment to the National Defense Authorization Act. The aim of this study is to create a map depicting the number of sightings of UAP per state and identify if there is a cluster of UAP sightings.
 
 # Materials and methods
 
 [\~ 200 words]
 
-Narrative: Clear narrative description of the data sources and methods. Includes data from at least two sources that were integrated / merged in R.
-
-Point locations of UAP/UFO sightings were from the National UFO Reporting Center. National UFO Reporting Center was founded in 1974 and has documented approximately 90,000 reported UFO sightings over its history mostly in the United States.
-
-The R Package 'usmap' was also used to obtain a contiguous map of United States.
-
-Code: The code associated with the project is well organized and easy to follow. Demonstrates mastery of R graphics and functions.
-
-Data: The underlying data are publicly accessible via the web and downloaded/accessed within the Rmd script. If you want to use your own data, you must make it available on a website (e.g. Figshare) so that others are able to re-run your code.
-
-You can do bullets like this:
-
--   The first most important thing
--   The second most important thing
--   The third most important thing
-
-You can do numbers like this:
-
-1.  The first most important thing
-2.  The second most important thing
-3.  The third most important thing
-
-See <http://rmarkdown.rstudio.com/> for all the amazing things you can do.
+Point locations of UAP/UFO sightings were from the National UFO Reporting Center. The National UFO Reporting Center was founded in 1974 and has documented approximately 90,000 reported UFO sightings over its history mostly in the United States. The shape file for the states will be obtained from the tigris package.
 
 Here's my first code chunk.
 
@@ -59,14 +35,15 @@ knitr::opts_chunk$set(cache=TRUE)  # cache the results for quick compiling
 
 ## Download and clean all required data
 
-```{r, message=F, warning=F}
-ufo = read_csv('https://query.data.world/s/6xru2x6vjkjgz5ck52invxt3j7mc5w')
+```{r, message = FALSE, warning = FALSE}
+uap = read_csv('https://query.data.world/s/6xru2x6vjkjgz5ck52invxt3j7mc5w')
 
 US_map = states(cb = T)
 US_map = as(US_map, 'sf')
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
 ```
 
-```{r, message = FALSE, warning = FALSE, eval = F}
+```{r, message = FALSE, warning = FALSE}
 US_map = states(cb = T)
 US_map = as(US_map, 'sf')
 ```
@@ -94,105 +71,115 @@ Tables and figures (maps and other graphics) are carefully planned to convey the
 
 Show tables, plots, etc. and describe them.
 
-```{r, fig.width=6, fig.height=3, fig.cap="Map of completely random data"}
-US_ufo = ufo %>% filter(state %in% us_states) %>% group_by(state) %>% summarize(n = n()) 
+```{r, fig.width=8, fig.height=5, fig.cap="Number of UAPs per State"}
+US_uap = uap %>% filter(state %in% us_states) %>% group_by(state) %>% summarize(n = n()) 
 
-US_map = left_join(US_map, US_ufo, by = c("STUSPS" = 'state'))
+US_map = left_join(US_map, US_uap, by = c("STUSPS" = 'state'))
 
 US_map %>% 
   ggplot() +
   geom_col(aes(x = fct_reorder(STUSPS, n), y = n)) + coord_flip() +
   theme_light() +
-  labs(x = 'Number of UFOs', y = 'State') +
+  labs(x = 'Number of UAPs', y = 'State') +
   geom_text(aes(x = fct_reorder(STUSPS, n), y = n, label = n), nudge_y = 350, size = 3.5) +
-  ggtitle('Number of UFOs per State')
+  ggtitle('Number of UAPs per State')
 ```
 
-```{r}
-ufo$year = year(ufo$date_time)
-ufo %>% select(year, state) %>%  na.omit() %>% 
+```{r, message = FALSE, warning = FALSE}
+uap$year = year(uap$date_time)
+uap %>% select(year, state) %>%  na.omit() %>% 
   group_by(year, state) %>% 
   summarize(n = n()) %>% ungroup() %>% 
-  group_by(year) %>% summarize(tot_ufos = sum(n)) %>% 
+  group_by(year) %>% summarize(tot_uaps = sum(n)) %>% 
   ggplot() +
-  geom_line(aes(x = year, y = tot_ufos)) +
-  geom_point(aes(x = year, y = tot_ufos)) +
+  geom_line(aes(x = year, y = tot_uaps)) +
+  geom_point(aes(x = year, y = tot_uaps)) +
   theme_light() +
-  labs(x = 'Year', y = 'UFO sightings') + 
-  ggtitle('UFO sightings in the USA from 1969 to 2022') +
+  labs(x = 'Year', y = 'UAP sightings') + 
+  ggtitle('UAP sightings in the USA from 1969 to 2022') +
   scale_x_continuous(breaks = seq(1969, 2022, 5))
+```
 
-
-ufo %>% select(year, state) %>%  na.omit() %>% 
+```{r, message = FALSE, warning = FALSE}
+uap %>% select(year, state) %>%  na.omit() %>% 
   filter(state %in% us_states[1:10]) %>% 
   group_by(year, state) %>% 
   summarize(n = n()) %>% ungroup() %>% 
-  group_by(year, state) %>% summarize(tot_ufos = sum(n)) %>% 
+  group_by(year, state) %>% summarize(tot_uaps = sum(n)) %>% 
   ggplot() +
-  geom_line(aes(x = year, y = tot_ufos, color = state)) +
-  geom_point(aes(x = year, y = tot_ufos, color = state)) +
+  geom_line(aes(x = year, y = tot_uaps, color = state)) +
+  geom_point(aes(x = year, y = tot_uaps, color = state)) +
   theme_light() +
-  labs(x = 'Year', y = 'UFO sightings') + 
-  ggtitle('UFO sightings in the USA from 1969 to 2022') +
+  labs(x = 'Year', y = 'UAP sightings') + 
+  ggtitle('UAP sightings in the USA from 1969 to 2022') +
   scale_x_continuous(breaks = seq(1969, 2022, 5)) +
   scale_color_discrete(name = 'State') + ylim(0, 900)
+```
 
-ufo %>% select(year, state) %>%  na.omit() %>% 
+```{r, message = FALSE, warning = FALSE}
+uap %>% select(year, state) %>%  na.omit() %>% 
   filter(state %in% us_states[11:20]) %>% 
   group_by(year, state) %>% 
   summarize(n = n()) %>% ungroup() %>% 
-  group_by(year, state) %>% summarize(tot_ufos = sum(n)) %>% 
+  group_by(year, state) %>% summarize(tot_uaps = sum(n)) %>% 
   ggplot() +
-  geom_line(aes(x = year, y = tot_ufos, color = state)) +
-  geom_point(aes(x = year, y = tot_ufos, color = state)) +
+  geom_line(aes(x = year, y = tot_uaps, color = state)) +
+  geom_point(aes(x = year, y = tot_uaps, color = state)) +
   theme_light() +
-  labs(x = 'Year', y = 'UFO sightings') + 
-  ggtitle('UFO sightings in the USA from 1969 to 2022') +
+  labs(x = 'Year', y = 'UAP sightings') + 
+  ggtitle('UAP sightings in the USA from 1969 to 2022') +
   scale_x_continuous(breaks = seq(1969, 2022, 5)) + 
   scale_color_discrete(name = 'State') + ylim(0, 900)
+```
 
-ufo %>% select(year, state) %>%  na.omit() %>% 
+```{r, message = FALSE, warning = FALSE}
+uap %>% select(year, state) %>%  na.omit() %>% 
   filter(state %in% us_states[21:30]) %>% 
   group_by(year, state) %>% 
   summarize(n = n()) %>% ungroup() %>% 
-  group_by(year, state) %>% summarize(tot_ufos = sum(n)) %>% 
+  group_by(year, state) %>% summarize(tot_uaps = sum(n)) %>% 
   ggplot() +
-  geom_line(aes(x = year, y = tot_ufos, color = state)) +
-  geom_point(aes(x = year, y = tot_ufos, color = state)) +
+  geom_line(aes(x = year, y = tot_uaps, color = state)) +
+  geom_point(aes(x = year, y = tot_uaps, color = state)) +
   theme_light() +
-  labs(x = 'Year', y = 'UFO sightings') + 
-  ggtitle('UFO sightings in the USA from 1969 to 2022') +
+  labs(x = 'Year', y = 'UAP sightings') + 
+  ggtitle('UAP sightings in the USA from 1969 to 2022') +
   scale_x_continuous(breaks = seq(1969, 2022, 5)) + 
   scale_color_discrete(name = 'State') + ylim(0, 900)
+```
 
-ufo %>% select(year, state) %>%  na.omit() %>% 
+```{r, message = FALSE, warning = FALSE}
+uap %>% select(year, state) %>%  na.omit() %>% 
   filter(state %in% us_states[31:40]) %>% 
   group_by(year, state) %>% 
   summarize(n = n()) %>% ungroup() %>% 
-  group_by(year, state) %>% summarize(tot_ufos = sum(n)) %>% 
+  group_by(year, state) %>% summarize(tot_uaps = sum(n)) %>% 
   ggplot() +
-  geom_line(aes(x = year, y = tot_ufos, color = state)) +
-  geom_point(aes(x = year, y = tot_ufos, color = state)) +
+  geom_line(aes(x = year, y = tot_uaps, color = state)) +
+  geom_point(aes(x = year, y = tot_uaps, color = state)) +
   theme_light() +
-  labs(x = 'Year', y = 'UFO sightings') + 
-  ggtitle('UFO sightings in the USA from 1969 to 2022') +
+  labs(x = 'Year', y = 'UAP sightings') + 
+  ggtitle('UAP sightings in the USA from 1969 to 2022') +
   scale_x_continuous(breaks = seq(1969, 2022, 5)) + 
   scale_color_discrete(name = 'State') + ylim(0, 900)
+```
 
-ufo %>% select(year, state) %>%  na.omit() %>% 
+```{r, message = FALSE, warning = FALSE}
+uap %>% select(year, state) %>%  na.omit() %>% 
   filter(state %in% us_states[41:49]) %>% 
   group_by(year, state) %>% 
   summarize(n = n()) %>% ungroup() %>% 
-  group_by(year, state) %>% summarize(tot_ufos = sum(n)) %>% 
+  group_by(year, state) %>% summarize(tot_uaps = sum(n)) %>% 
   ggplot() +
-  geom_line(aes(x = year, y = tot_ufos, color = state)) +
-  geom_point(aes(x = year, y = tot_ufos, color = state)) +
+  geom_line(aes(x = year, y = tot_uaps, color = state)) +
+  geom_point(aes(x = year, y = tot_uaps, color = state)) +
   theme_light() +
-  labs(x = 'Year', y = 'UFO sightings') + 
-  ggtitle('UFO sightings in the USA from 1969 to 2022') +
+  labs(x = 'Year', y = 'UAP sightings') + 
+  ggtitle('UAP sightings in the USA from 1969 to 2022') +
   scale_x_continuous(breaks = seq(1969, 2022, 5)) + 
   scale_color_discrete(name = 'State') + ylim(0, 900)
-
+```
+```{r, message = FALSE, warning = FALSE}
 US_map_nb = poly2nb(US_map)
 US_map_listw = nb2listw(US_map_nb)
 
@@ -207,10 +194,11 @@ ggplot(US_map) +
   geom_point(data = US_coords, aes(x = X1, y = X2), color = 'red') +
   theme_light() +
   ggtitle('Contiguous US neighborhood structure')
+```
 
-
+```{r, message = FALSE, warning = FALSE}
 labels <- sprintf(
-  "<strong>%s</strong><br/>%g ufos",
+  "<strong>%s</strong><br/>%g uaps",
   US_map$NAME, US_map$n
 ) %>% lapply(htmltools::HTML)
 
@@ -229,9 +217,11 @@ leaflet(US_map) %>%
       fillOpacity = 1,
       bringToFront = TRUE)) %>%
   addProviderTiles(providers$Esri.WorldStreetMap) %>% 
-  addLegend(pal = pal, values = ~n, opacity = 0.7, title = 'UFO Sightings: 1969 - 2022',
+  addLegend(pal = pal, values = ~n, opacity = 0.7, title = 'UAP Sightings: 1969 - 2022',
             position = "bottomright")
+```
 
+```{r, message = FALSE, warning = FALSE}
 moran.mc(US_map$n, listw = US_map_listw, nsim = 9999)
 
 ```
