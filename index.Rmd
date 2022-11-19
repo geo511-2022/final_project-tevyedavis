@@ -82,7 +82,7 @@ US_map %>%
   theme_light() +
   labs(x = 'Number of UAPs', y = 'State') +
   geom_text(aes(x = fct_reorder(STUSPS, n), y = n, label = n), nudge_y = 350, size = 3.5) +
-  ggtitle('Number of UAPs per State')
+  ggtitle('Number of UAPs per State') 
 ```
 
 ```{r, message = FALSE, warning = FALSE}
@@ -193,7 +193,7 @@ ggplot(US_map) +
   geom_sf(data = neighborhood) +
   geom_point(data = US_coords, aes(x = X1, y = X2), color = 'red') +
   theme_light() +
-  ggtitle('Contiguous US neighborhood structure')
+  ggtitle('Contiguous US neighborhood structure') 
 ```
 
 ```{r, message = FALSE, warning = FALSE}
@@ -204,7 +204,7 @@ labels <- sprintf(
 
 pal = colorBin('YlOrRd', domain = US_map$n, bins = quantile(US_map$n, c(seq(0,0.9, by = 0.1125), 1)))
 
-leaflet(US_map) %>% 
+leaflet(US_map) %>%  
   addPolygons(
     fillColor = ~pal(n),
     fillOpacity = 1, 
