@@ -8,17 +8,13 @@ subtitle:
 
 [\~ 200 words]
 
-An unidentified flying object (UFO), recently renamed as a UAP (unidentified aerial phenomenon) are observations of events in the sky that cannot be identified as aircraft or as known natural phenomena. Understanding the data surrounding unidentified aerial phenomena is critical to helping us draw scientific conclusions about what is happening in the sky. Unidentified aerial phenomena are of interest, from a security and safety perspective. There have been several studies of UAPs carried out by various US government agencies, including a Pentagon report that was declassified in June 2021. The US House of Representatives recently voted to encourage the sharing of more UFO sightings by adopting a bipartisan amendment to the National Defense Authorization Act. The aim of this study is to create a map depicting the number of sightings of UAP per state and identify if there is a cluster of UAP sightings.
+An unidentified flying object (UFO), recently renamed as a UAP (unidentified aerial phenomenon) are observations of events in the sky that cannot be identified as aircraft or as known natural phenomena. Understanding the data surrounding unidentified aerial phenomena is critical to helping us draw scientific conclusions about what is happening in the sky. The U.S. intelligence community adopts five explanatory categories for UAPs. They are airborne clutter, natural atmospheric phenomena, U.S. Government or U.S. industry developmental programs, foreign adversary systems, and a catchall “other”. Unidentified aerial phenomena are of interest, from a national security and flight safety perspective. Flight Safety, with respect to an increasingly cluttered air space. National security, with respect to foreign adversaries’ data collection platforms or adversaries having developed either a breakthrough or disruptive technology. There have been several studies of UAPs carried out by various US government agencies throughout the years, including a recent report by the Office of Director of National Intelligence, that was declassified in June 2021. Legislatively, the US House of Representatives recently voted to encourage the sharing of more UFO sightings by adopting a bipartisan amendment to the National Defense Authorization Act. The aim of this study is to create a map depicting the number of sightings of UAP per state and identify if there is a cluster of UAP sightings.
 
 # Materials and methods
 
 [\~ 200 words]
 
-Point locations of UAP/UFO sightings were from the National UFO Reporting Center. The National UFO Reporting Center was founded in 1974 and has documented approximately 90,000 reported UFO sightings over its history mostly in the United States. The shape file for the states will be obtained from the tigris package.
-
-Here's my first code chunk.
-
-Load any required packages in a code chunk (you may need to install some packages):
+Point locations of unidentified aerial phenomenon sightings were obtained from the National UFO Reporting Center. The National UFO Reporting Center was founded in 1974 and has documented approximately 90,000 reported UFO sightings over its history mostly in the United States. The shape file for the states will be obtained from the tigris package, which was filtered to obtain the 49 contiguous states.
 
 ```{r, message=F, warning=F}
 library(tidyverse)
@@ -35,7 +31,7 @@ knitr::opts_chunk$set(cache=TRUE)  # cache the results for quick compiling
 
 ## Download and clean all required data
 
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, results='hide'}
 uap = read_csv('https://query.data.world/s/6xru2x6vjkjgz5ck52invxt3j7mc5w')
 
 US_map = states(cb = T)
@@ -43,7 +39,7 @@ US_map = as(US_map, 'sf')
 knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
 ```
 
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, results='hide'}
 US_map = states(cb = T)
 US_map = as(US_map, 'sf')
 ```
@@ -61,15 +57,13 @@ US_map = US_map %>% filter(STUSPS %in% us_states)
 
 ```
 
-Add any additional processing steps here.
 
 # Results
 
 [\~200 words]
 
-Tables and figures (maps and other graphics) are carefully planned to convey the results of your analysis. Intense exploration and evidence of many trials and failures. The author looked at the data in many different ways before coming to the final presentation of the data.
 
-Show tables, plots, etc. and describe them.
+To get a basic understanding of the data, a bar chart was ploted to tabulate the total number of UAP sighting per state. 
 
 ```{r, fig.width=8, fig.height=5, fig.cap="Number of UAPs per State"}
 US_uap = uap %>% filter(state %in% us_states) %>% group_by(state) %>% summarize(n = n()) 
@@ -83,7 +77,10 @@ US_map %>%
   labs(x = 'Number of UAPs', y = 'State') +
   geom_text(aes(x = fct_reorder(STUSPS, n), y = n, label = n), nudge_y = 350, size = 3.5) +
   ggtitle('Number of UAPs per State')
+
 ```
+
+Additionally, a line graphy was plotted to visualize the number of UAP sightings per year. 
 
 ```{r, message = FALSE, warning = FALSE}
 uap$year = year(uap$date_time)
@@ -99,6 +96,8 @@ uap %>% select(year, state) %>%  na.omit() %>%
   ggtitle('UAP sightings in the USA from 1969 to 2022') +
   scale_x_continuous(breaks = seq(1969, 2022, 5))
 ```
+
+To further understand the data, the number of sightings per year for every state. Note, each graph is limited to 10 state for better visualization. 
 
 ```{r, message = FALSE, warning = FALSE}
 uap %>% select(year, state) %>%  na.omit() %>% 
