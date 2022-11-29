@@ -8,7 +8,7 @@ subtitle:
 
 [\~ 200 words]
 
-An unidentified flying object (UFO), recently renamed as a UAP (unidentified aerial phenomenon) are observations of events in the sky that cannot be identified as aircraft or as known natural phenomena. Understanding the data surrounding unidentified aerial phenomena is critical to helping us draw scientific conclusions about what is happening in the sky. The U.S. intelligence community adopts five explanatory categories for UAPs. They are airborne clutter, natural atmospheric phenomena, U.S. Government or U.S. industry developmental programs, foreign adversary systems, and a catchall “other”. Unidentified aerial phenomena are of interest, from a national security and flight safety perspective. Flight Safety, with respect to an increasingly cluttered air space. National security, with respect to foreign adversaries’ data collection platforms or adversaries having developed either a breakthrough or disruptive technology. There have been several studies of UAPs carried out by various US government agencies throughout the years, including a recent report by the Office of Director of National Intelligence, that was declassified in June 2021. Legislatively, the US House of Representatives recently voted to encourage the sharing of more UFO sightings by adopting a bipartisan amendment to the National Defense Authorization Act. The aim of this study is to create a map depicting the number of sightings of UAP per state and identify if there is a cluster of UAP sightings.
+An unidentified flying object (UFO), recently renamed as a UAP (unidentified aerial phenomenon) are observations of events in the sky that cannot be identified as aircraft or as known natural phenomena. Understanding the data surrounding unidentified aerial phenomena is critical to helping us draw scientific conclusions about what is happening in the sky. The U.S. intelligence community adopts five explanatory categories for UAPs. They are airborne clutter, natural atmospheric phenomena, U.S. Government or U.S. industry developmental programs, foreign adversary systems, and a catchall "other". Unidentified aerial phenomena are of interest, from a national security and flight safety perspective. Flight Safety, with respect to an increasingly cluttered air space. National security, with respect to foreign adversaries' data collection platforms or adversaries having developed either a breakthrough or disruptive technology. There have been several studies of UAPs carried out by various US government agencies throughout the years, including a recent report by the Office of Director of National Intelligence, that was declassified in June 2021. Legislatively, the US House of Representatives recently voted to encourage the sharing of more UFO sightings by adopting a bipartisan amendment to the National Defense Authorization Act. The aim of this study is to create a map depicting the number of sightings of UAP per state and identify if there is a cluster of UAP sightings.
 
 # Materials and methods
 
@@ -57,13 +57,11 @@ US_map = US_map %>% filter(STUSPS %in% us_states)
 
 ```
 
-
 # Results
 
 [\~200 words]
 
-
-To get a basic understanding of the data, a bar chart was ploted to tabulate the total number of UAP sighting per state. 
+To get a basic understanding of the data, a bar chart was ploted to tabulate the total number of UAP sighting per state.
 
 ```{r, fig.width=8, fig.height=5, fig.cap="Number of UAPs per State"}
 US_uap = uap %>% filter(state %in% us_states) %>% group_by(state) %>% summarize(n = n()) 
@@ -80,7 +78,7 @@ US_map %>%
 
 ```
 
-Additionally, a line graphy was plotted to visualize the number of UAP sightings per year. 
+Additionally, a line graphy was plotted to visualize the number of UAP sightings per year.
 
 ```{r, message = FALSE, warning = FALSE}
 uap$year = year(uap$date_time)
@@ -97,7 +95,7 @@ uap %>% select(year, state) %>%  na.omit() %>%
   scale_x_continuous(breaks = seq(1969, 2022, 5))
 ```
 
-To further understand the data, the number of sightings per year for every state. Note, each graph is limited to 10 state for better visualization. 
+To further understand the data, the number of sightings per year for every state. Note, each graph is limited to 10 state for better visualization.
 
 ```{r, message = FALSE, warning = FALSE}
 uap %>% select(year, state) %>%  na.omit() %>% 
@@ -163,6 +161,10 @@ uap %>% select(year, state) %>%  na.omit() %>%
   scale_color_discrete(name = 'State') + ylim(0, 900)
 ```
 
+In general, spatial data exhibit increasing range of values (increased spatial heterogeneity) with increased distance. Another way of saying this is refering to Waldo R. Tobler's first law of geography "everything is related to everything else, but near things are more related than distant things."
+
+Spatial autocorrelation indicates if there is clustering or dispersion in a map. While a positive Moran's I hints at data is clustered, a negative Moran's I implies data is dispersed. In order to calculate spatial autocorrelation and also model spatial interaction, we need to impose a structure to constrain the number of neighbors to be considered. As a result we construct a "neighborhood matrix" for the 49 contiguous US states, using the spdep package.
+
 ```{r, message = FALSE, warning = FALSE}
 uap %>% select(year, state) %>%  na.omit() %>% 
   filter(state %in% us_states[41:49]) %>% 
@@ -178,6 +180,7 @@ uap %>% select(year, state) %>%  na.omit() %>%
   scale_x_continuous(breaks = seq(1969, 2022, 5)) + 
   scale_color_discrete(name = 'State') + ylim(0, 900)
 ```
+
 ```{r, message = FALSE, warning = FALSE}
 US_map_nb = poly2nb(US_map)
 US_map_listw = nb2listw(US_map_nb)
@@ -194,6 +197,23 @@ ggplot(US_map) +
   theme_light() +
   ggtitle('Contiguous US neighborhood structure')
 ```
+
+the Global Moran I is defined as:
+
+$$I = \frac{\sum_i\sum_jw_{ij}z_iz_j/S_0}{\sum_{i}z_i^2/n} $$ where:
+
+-   $z_i = x_i - \bar{x}$
+-   $x$ is the value of the variable on area $i$
+-   $\bar{x}$ is the mean of the variable
+-   $n$ is the number of areas
+-   $S_0 = \sum_i\sum_jw_{ij}$ is the sum of all weights
+-   $w_{ij}$ is the weight of the neighbors. In this case $w_{ij} =1$ if areas $i$ and $j$ are neighbors and $w_{ij} = 0$ otherwise.
+
+The Global Moran I varies from -1 to 1, with -1 indicating strong negative spatial autocorrelation and 1 indicating strong positive spatial autocorrelation. For values near 0 there is no spatial autocorrelation, suggesting that the data is spatially random.
+
+It is also possible to treat this statistic as a hypothesis test with the following hypothesis: $$ H_0:\hbox{ The data is not spatially autocorrelated} \times H_1:\hbox{ The data is spatially autocorrelated} $$
+
+With this we can proceed to the choropleth maps and then evaluate the spatial autocorrelation.
 
 ```{r, message = FALSE, warning = FALSE}
 labels <- sprintf(
