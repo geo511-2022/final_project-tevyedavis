@@ -1,6 +1,6 @@
 ---
 title: "Unidentified Aerial Phenomenon in America"
-author: Tev'ye davish
+author: Tev'ye Davis
 ---
 
 # Introduction
@@ -62,7 +62,7 @@ US_map = US_map %>% filter(STUSPS %in% us_states)
 
 To get a basic understanding of the data, a bar chart was ploted to tabulate the total number of UAP sighting per state.
 
-```{r, fig.width=8, fig.height=5, fig.cap="Number of UAPs per State"}
+```{r, fig.width=8, fig.height=10, fig.cap="Number of UAPs per State"}
 US_uap = uap %>% filter(state %in% us_states) %>% group_by(state) %>% summarize(n = n()) 
 
 US_map = left_join(US_map, US_uap, by = c("STUSPS" = 'state'))
