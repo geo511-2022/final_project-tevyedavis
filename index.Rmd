@@ -15,7 +15,7 @@ An unidentified flying object (UFO), recently renamed as a UAP (unidentified aer
 
 Point locations of unidentified aerial phenomenon sightings were obtained from the National UFO Reporting Center. The National UFO Reporting Center was founded in 1974 and has documented approximately 90,000 reported UFO sightings over its history mostly in the United States. The shape file for the states will be obtained from the tigris package, which was filtered to obtain the 49 contiguous states.
 
-```{r, message=F, warning=F}
+```{r, message=F, warning=F, echo=FALSE}
 library(tidyverse)
 library(leaflet)
 library(htmltools)
