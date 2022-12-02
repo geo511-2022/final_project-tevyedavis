@@ -13,7 +13,7 @@ An unidentified flying object (UFO), recently renamed as a UAP (unidentified aer
 
 [\~ 200 words]
 
-Point locations of unidentified aerial phenomenon sightings were obtained from the National UFO Reporting Center. The National UFO Reporting Center was founded in 1974 and has documented approximately 90,000 reported UFO sightings over its history mostly in the United States. The shape file for the states will be obtained from the tigris package, which was filtered to obtain the 49 contiguous states.
+Point locations of unidentified aerial phenomenon sightings were obtained from the National UFO Reporting Center. The National UFO Reporting Center was founded in 1974 and has documented approximately 90,000 reported UFO sightings over its history mostly in the United States. The shape file for the states will be obtained from the tigris package, which was filtered to obtain the 49 contiguous states to conduct the spatial analysis.
 
 ```{r, message=F, warning=F, echo=FALSE}
 library(tidyverse)
@@ -60,7 +60,7 @@ US_map = US_map %>% filter(STUSPS %in% us_states)
 
 [\~200 words]
 
-To get a basic understanding of the data, a bar chart was ploted to tabulate the total number of UAP sighting per state.
+Before conducting the analysis, a bar chart was ploted to tabulate the total number of UAP sighting per state, to get a basic understanding of the data. 
 
 ```{r, fig.width=8, fig.height=10, fig.cap="Number of UAPs per State"}
 US_uap = uap %>% filter(state %in% us_states) %>% group_by(state) %>% summarize(n = n()) 
@@ -76,8 +76,9 @@ US_map %>%
   ggtitle('Number of UAPs per State')
 
 ```
+The bar chart shows that california has the highest number of sightings of UAP and Washington DC has the lowest umber of sightings of UAP. 
 
-Additionally, a line graphy was plotted to visualize the number of UAP sightings per year.
+To understand how the UAP sightings changed over timee (i.e. a time series analysis), a line graph was plotted to visualize the number of UAP sightings per year.
 
 ```{r, message = FALSE, warning = FALSE}
 uap$year = year(uap$date_time)
@@ -94,7 +95,9 @@ uap %>% select(year, state) %>%  na.omit() %>%
   scale_x_continuous(breaks = seq(1969, 2022, 5))
 ```
 
-To further understand the data, the number of sightings per year for every state. Note, each graph is limited to 10 state for better visualization.
+The line graph shows that UAP sightings started increasing dramatically since 1994, peaking in 2014. This was followed by a sharp drop in 2018, sharp increase up to 2020 and a drop up to 2022.   
+
+As first illustrated, there are major difference in the number of UAP sightings per state. To further the time series analysis, the number of sightings per year for every state was graphed. Note, each graph being limited to 10 state for better visualization.
 
 ```{r, message = FALSE, warning = FALSE}
 uap %>% select(year, state) %>%  na.omit() %>% 
