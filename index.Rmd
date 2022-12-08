@@ -205,7 +205,9 @@ ggplot(US_map) +
 
 the Global Moran I is defined as:
 
-$I = \frac{\sum_i\sum_jw_{ij}z_iz_j/S_0}{\sum_{i}z_i^2/n} $ where:
+$I$ $= \frac{\sum_i\sum_jw_{ij}z_iz_j/S_0}{\sum_{i}z_i^2/n}$ 
+
+where:
 
 -   $z_i = x_i - \bar{x}$
 -   $x$ is the value of the variable on area $i$
@@ -218,7 +220,7 @@ The Global Moran I varies from -1 to 1, with -1 indicating strong negative spati
 
 It is also possible to treat this statistic as a hypothesis test with the following hypothesis: $ H_0:\hbox{ The data is not spatially autocorrelated} \times H_1:\hbox{ The data is spatially autocorrelated} $
 
-With this we can proceed to the choropleth maps and then evaluate the spatial autocorrelation.
+A choropleth map will first be depicted to remind us of the spatial distribution of the UAP sightings from 1969 and then evaluate the spatial autocorrelation.
 
 ```{r, message = FALSE, warning = FALSE}
 labels <- sprintf(
@@ -252,10 +254,10 @@ moran.mc(US_map$n, listw = US_map_listw, nsim = 9999)
 
 # Conclusions
 
-[\~200 words]
-
-Clear summary adequately describing the results and putting them in context. Discussion of further questions and ways to continue investigation.
+UAP sightings from 1969 to 2022 are not randomly distributed in America. However, one has to be careful about interpreting spatial autocorrelation as measurements are specific to a particular scales in this case the 49 contiguous states used. If analyzed by county, it may lead to a different spatial pattern and scale, thus leading to a different outcome or conclusion. Nevertheless, the statistical techniques used is useful as it simultaneously handles the locational and attribute information in the dataset. 
 
 # References
 
-All sources are cited in a consistent manner
+Goodchild, Michael F. Spatial Autocorrelation. Catmog 47, Geo Books. 1986
+
+Rogerson, Peter. Statistical Methods for Geography fifth edition. 2020
