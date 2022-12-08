@@ -67,7 +67,7 @@ US_map %>%
   ggplot() +
   geom_col(aes(x = fct_reorder(STUSPS, n), y = n)) + coord_flip() +
   theme_light() +
-  labs(x = 'Number of UAPs', y = 'State') +
+  labs(x = 'State', y = 'Number of UAPs') +
   geom_text(aes(x = fct_reorder(STUSPS, n), y = n, label = n), nudge_y = 350, size = 3.5) +
   ggtitle('Number of UAPs per State')
 
