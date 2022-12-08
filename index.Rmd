@@ -98,7 +98,7 @@ uap %>% select(year, state) %>%  na.omit() %>%
 
 The line graph shows that UAP sightings started increasing dramatically since 1994, peaking in 2014. This was followed by a sharp drop in 2018, a sharp increase up to 2020 and then a drop up to 2022.   
 
-As first illustrated, there are major differences in the number of UAP sightings per state. To further the time series analysis, the number of sightings per year for every state was graphed. Note, each graph being limited to 10 state for better visualization.
+As first illustrated, there are major differences in the number of UAP sightings per state. To further the time series analysis, the number of sightings per year for every state was graphed. Note, each graph being plotted is limited to 10 state for better visualization and interpretation. 
 
 ```{r, message = FALSE, warning = FALSE}
 uap %>% select(year, state) %>%  na.omit() %>% 
@@ -205,9 +205,7 @@ ggplot(US_map) +
 
 the Global Moran I is defined as:
 
-$I$ $= \frac{\sum_i\sum_jw_{ij}z_iz_j/S_0}{\sum_{i}z_i^2/n}$ 
-
-where:
+- $I = \frac{\sum_i\sum_jw_{ij}z_iz_j/S_0}{\sum_{i}z_i^2/n}$ where:
 
 -   $z_i = x_i - \bar{x}$
 -   $x$ is the value of the variable on area $i$
@@ -242,7 +240,7 @@ leaflet(US_map) %>%
       color = 'black',
       fillOpacity = 1,
       bringToFront = TRUE)) %>%
-  addProviderTiles(providers$Esri.WorldStreetMap) %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>% 
   addLegend(pal = pal, values = ~n, opacity = 0.7, title = 'UAP Sightings: 1969 - 2022',
             position = "bottomright")
 ```
@@ -254,7 +252,7 @@ moran.mc(US_map$n, listw = US_map_listw, nsim = 9999)
 
 # Conclusions
 
-UAP sightings from 1969 to 2022 are not randomly distributed in America. However, one has to be careful about interpreting spatial autocorrelation as measurements are specific to a particular scales in this case the 49 contiguous states used. If analyzed by county, it may lead to a different spatial pattern and scale, thus leading to a different outcome or conclusion. Nevertheless, the statistical techniques used is useful as it simultaneously handles the locational and attribute information in the dataset. 
+UAP sightings from 1969 to 2022 are not randomly distributed in America. However, one has to be careful about interpreting spatial autocorrelation as measurements are specific to a particular scales in this case the 49 contiguous states used. If analyzed by county, it may lead to a different spatial pattern or arrangement and scale, thus leading to a different outcome or conclusion. Nevertheless, the statistical techniques used is useful as it simultaneously handles the locational and attribute information in the dataset. 
 
 # References
 
