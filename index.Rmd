@@ -5,17 +5,15 @@ author: Tev'ye Davis
 
 # Introduction
 
-[\~ 200 words]
-
 An unidentified flying object (UFO), recently renamed as a UAP (unidentified aerial phenomenon) are observations of events in the sky that cannot be identified as aircraft or as known natural phenomena. Understanding the data surrounding unidentified aerial phenomena is critical to helping us draw scientific conclusions about what is happening in the sky. The U.S. intelligence community adopts five explanatory categories for UAPs. They are airborne clutter, natural atmospheric phenomena, U.S. Government or U.S. industry developmental programs, foreign adversary systems, and a catchall "other". Unidentified aerial phenomena are of interest, from a national security and flight safety perspective. Flight Safety, with respect to an increasingly cluttered air space. National security, with respect to foreign adversaries' data collection platforms or adversaries having developed either a breakthrough or disruptive technology. There have been several studies of UAPs carried out by various US government agencies throughout the years, including a recent report by the Office of Director of National Intelligence, that was declassified in June 2021. Legislatively, the US House of Representatives recently voted to encourage the sharing of more UFO sightings by adopting a bipartisan amendment to the National Defense Authorization Act. The aim of this study is to create a map depicting the number of sightings of UAP per state and identify if there is a cluster of UAP sightings.
 
 # Materials and methods
 
-[\~ 200 words]
+Point locations of unidentified aerial phenomenon sightings were obtained from the National UFO Reporting Center. The National UFO Reporting Center was founded in 1974 and has documented approximately 90,000 reported UFO sightings over its history mostly in the United States. The shapefile for the states will be obtained from the tigris package, which was filtered to obtain the 49 contiguous states to conduct the spatial analysis. The sdep package will be used to create a spatial weights matrix objects from the contiguous polygons of the 49 states, which will further allow the testing of spatial autocorrelation. 
 
-Point locations of unidentified aerial phenomenon sightings were obtained from the National UFO Reporting Center. The National UFO Reporting Center was founded in 1974 and has documented approximately 90,000 reported UFO sightings over its history mostly in the United States. The shape file for the states will be obtained from the tigris package, which was filtered to obtain the 49 contiguous states to conduct the spatial analysis.
+The package leaflet will also be used to visualize or map sightings of UAP from 1969. To aid in the processing of the overall data and annalysis libraries such as tidyverse will be used. This package will facilitate the transformation and better presentation of data by improving data import, "tidying", manipulation, and data visualization.  
 
-```{r, message=F, warning=F, echo=FALSE}
+```{r, message=F, warning=F}
 library(tidyverse)
 library(leaflet)
 library(htmltools)
@@ -97,7 +95,7 @@ uap %>% select(year, state) %>%  na.omit() %>%
 
 The line graph shows that UAP sightings started increasing dramatically since 1994, peaking in 2014. This was followed by a sharp drop in 2018, sharp increase up to 2020 and a drop up to 2022.   
 
-As first illustrated, there are major difference in the number of UAP sightings per state. To further the time series analysis, the number of sightings per year for every state was graphed. Note, each graph being limited to 10 state for better visualization.
+As first illustrated, there are major differences in the number of UAP sightings per state. To further the time series analysis, the number of sightings per year for every state was graphed. Note, each graph being limited to 10 state for better visualization.
 
 ```{r, message = FALSE, warning = FALSE}
 uap %>% select(year, state) %>%  na.omit() %>% 
