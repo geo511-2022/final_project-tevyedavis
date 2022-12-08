@@ -11,7 +11,7 @@ An unidentified flying object (UFO), recently renamed as a UAP (unidentified aer
 
 Point locations of unidentified aerial phenomenon sightings were obtained from the National UFO Reporting Center. The National UFO Reporting Center was founded in 1974 and has documented approximately 90,000 reported UFO sightings over its history mostly in the United States. The shapefile for the states will be obtained from the tigris package, which was filtered to obtain the 49 contiguous states to conduct the spatial analysis. The sdep package will be used to create a spatial weights matrix objects from the contiguous polygons of the 49 states, which will further allow the testing of spatial autocorrelation. 
 
-The package leaflet will also be used to visualize or map sightings of UAP from 1969. To aid in the processing of the overall data and annalysis libraries such as tidyverse will be used. This package will facilitate the transformation and better presentation of data by improving data import, "tidying", manipulation, and data visualization.  
+The package leaflet will also be used to visualize or map sightings of UAP from 1969. To aid in the processing of the overall the data and analysis, libraries such as tidyverse will be used. This package will facilitate the transformation and presentation of data by improving data import, "tidying", manipulating, and visualization of the data. The lubridate will be used to work with date-times and time-spans. it allows fast and user friendly parsing of date-time data, extraction and updating.   
 
 ```{r, message=F, warning=F}
 library(tidyverse)
@@ -56,9 +56,7 @@ US_map = US_map %>% filter(STUSPS %in% us_states)
 
 # Results
 
-[\~200 words]
-
-Before conducting the analysis, a bar chart was ploted to tabulate the total number of UAP sighting per state, to get a basic understanding of the data. 
+Before conducting the analysis, a bar chart was plotted to tabulate the total number of UAP sighting per state, to get a basic understanding of the data. 
 
 ```{r, fig.width=8, fig.height=10, fig.cap="Number of UAPs per State"}
 US_uap = uap %>% filter(state %in% us_states) %>% group_by(state) %>% summarize(n = n()) 
@@ -74,9 +72,14 @@ US_map %>%
   ggtitle('Number of UAPs per State')
 
 ```
-The bar chart shows that california has the highest number of sightings of UAP and Washington DC has the lowest umber of sightings of UAP. 
 
-To understand how the UAP sightings changed over timee (i.e. a time series analysis), a line graph was plotted to visualize the number of UAP sightings per year.
+
+
+The bar chart shows that california has the highest number of sightings of UAP and Washington DC has the lowest number of sightings of UAP. 
+
+
+
+To understand how the UAP sightings changed over time (i.e. a time series analysis), a line graph was plotted to visualize the number of UAP sightings per year.
 
 ```{r, message = FALSE, warning = FALSE}
 uap$year = year(uap$date_time)
@@ -93,7 +96,7 @@ uap %>% select(year, state) %>%  na.omit() %>%
   scale_x_continuous(breaks = seq(1969, 2022, 5))
 ```
 
-The line graph shows that UAP sightings started increasing dramatically since 1994, peaking in 2014. This was followed by a sharp drop in 2018, sharp increase up to 2020 and a drop up to 2022.   
+The line graph shows that UAP sightings started increasing dramatically since 1994, peaking in 2014. This was followed by a sharp drop in 2018, a sharp increase up to 2020 and then a drop up to 2022.   
 
 As first illustrated, there are major differences in the number of UAP sightings per state. To further the time series analysis, the number of sightings per year for every state was graphed. Note, each graph being limited to 10 state for better visualization.
 
@@ -161,9 +164,6 @@ uap %>% select(year, state) %>%  na.omit() %>%
   scale_color_discrete(name = 'State') + ylim(0, 900)
 ```
 
-In general, spatial data exhibit increasing range of values (increased spatial heterogeneity) with increased distance. Another way of saying this is refering to Waldo R. Tobler's first law of geography "everything is related to everything else, but near things are more related than distant things."
-
-Spatial autocorrelation indicates if there is clustering or dispersion in a map. While a positive Moran's I hints at data is clustered, a negative Moran's I implies data is dispersed. In order to calculate spatial autocorrelation and also model spatial interaction, we need to impose a structure to constrain the number of neighbors to be considered. As a result we construct a "neighborhood matrix" for the 49 contiguous US states, using the spdep package.
 
 ```{r, message = FALSE, warning = FALSE}
 uap %>% select(year, state) %>%  na.omit() %>% 
@@ -180,6 +180,11 @@ uap %>% select(year, state) %>%  na.omit() %>%
   scale_x_continuous(breaks = seq(1969, 2022, 5)) + 
   scale_color_discrete(name = 'State') + ylim(0, 900)
 ```
+
+
+In general, spatial data exhibit increasing range of values (increased spatial heterogeneity) with increased distance. Another way of saying this is refering to Waldo R. Tobler's first law of geography "everything is related to everything else, but near things are more related than distant things."
+
+Spatial autocorrelation indicates if there is clustering or dispersion in a map. While a positive Moran's I indicate that the data is clustered, a negative Moran's I implies data is dispersed. In order to calculate spatial autocorrelation and also model spatial interaction, we need to impose a structure to constrain the number of neighbors to be considered. Subsequently, a "neighborhood matrix" will be constructed for the 49 contiguous US states, using the spdep package.
 
 ```{r, message = FALSE, warning = FALSE}
 US_map_nb = poly2nb(US_map)
@@ -200,7 +205,7 @@ ggplot(US_map) +
 
 the Global Moran I is defined as:
 
-$$I = \frac{\sum_i\sum_jw_{ij}z_iz_j/S_0}{\sum_{i}z_i^2/n} $$ where:
+$I = \frac{\sum_i\sum_jw_{ij}z_iz_j/S_0}{\sum_{i}z_i^2/n} $ where:
 
 -   $z_i = x_i - \bar{x}$
 -   $x$ is the value of the variable on area $i$
@@ -211,7 +216,7 @@ $$I = \frac{\sum_i\sum_jw_{ij}z_iz_j/S_0}{\sum_{i}z_i^2/n} $$ where:
 
 The Global Moran I varies from -1 to 1, with -1 indicating strong negative spatial autocorrelation and 1 indicating strong positive spatial autocorrelation. For values near 0 there is no spatial autocorrelation, suggesting that the data is spatially random.
 
-It is also possible to treat this statistic as a hypothesis test with the following hypothesis: $$ H_0:\hbox{ The data is not spatially autocorrelated} \times H_1:\hbox{ The data is spatially autocorrelated} $$
+It is also possible to treat this statistic as a hypothesis test with the following hypothesis: $ H_0:\hbox{ The data is not spatially autocorrelated} \times H_1:\hbox{ The data is spatially autocorrelated} $
 
 With this we can proceed to the choropleth maps and then evaluate the spatial autocorrelation.
 
