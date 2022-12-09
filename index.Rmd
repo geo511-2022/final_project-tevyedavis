@@ -5,13 +5,13 @@ author: Tev'ye Davis
 
 # Introduction
 
-An unidentified flying object (UFO), recently renamed as a UAP (unidentified aerial phenomenon) are observations of events in the sky that cannot be identified as aircraft or as known natural phenomena. Understanding the data surrounding unidentified aerial phenomena is critical to helping us draw scientific conclusions about what is happening in the sky. The U.S. intelligence community adopts five explanatory categories for UAPs. They are airborne clutter, natural atmospheric phenomena, U.S. Government or U.S. industry developmental programs, foreign adversary systems, and a catchall "other". Unidentified aerial phenomena are of interest, from a national security and flight safety perspective. Flight Safety, with respect to an increasingly cluttered air space. National security, with respect to foreign adversaries' data collection platforms or adversaries having developed either a breakthrough or disruptive technology. There have been several studies of UAPs carried out by various US government agencies throughout the years, including a recent report by the Office of Director of National Intelligence, that was declassified in June 2021. Legislatively, the US House of Representatives recently voted to encourage the sharing of more UFO sightings by adopting a bipartisan amendment to the National Defense Authorization Act. The aim of this study is to create a map depicting the number of sightings of UAP per state and identify if there is a cluster of UAP sightings.
+An unidentified flying object (UFO), recently renamed in 2022 as unidentified aerial phenomenon (UAP) are observations of events in the sky that cannot be immediately identified as an aircraft or as a known natural phenomena. Drawing scientific conclusions about what is happening in the sky can only be done by understanding the data surrounding the unidentified aerial phenomena. In U.S. intelligence community, there are five adopted explanatory categories for UAPs. They are; airborne clutter, natural atmospheric phenomena, U.S. Government or U.S. industry developmental programs, foreign adversary systems, and a catchall category "other". Not only is unidentified aerial phenomena are of interest from a national security perspective but also concerns flight safety, as an increasingly cluttered air space is unsafe. With respects to national security, foreign adversaries' data collection platforms or adversaries having developed either a breakthrough or disruptive technology is of great concern to the U.S. intelligence community. There have been several studies of UAPs carried out by various US government agencies throughout the years, including a recent report by the Office of Director of National Intelligence, that was declassified in June 2021 which recommended further reasearch and funding. Legislatively, the US House of Representatives recently voted to encourage the sharing of more UFO sightings by adopting a bipartisan amendment to the National Defense Authorization Act. The aim of this study is to create a map depicting the number of sightings of UAP per the 49 contiguous states and identify if there is a cluster of UAP sightings.
 
 # Materials and methods
 
-Point locations of unidentified aerial phenomenon sightings were obtained from the National UFO Reporting Center. The National UFO Reporting Center was founded in 1974 and has documented approximately 90,000 reported UFO sightings over its history mostly in the United States. The shapefile for the states will be obtained from the tigris package, which was filtered to obtain the 49 contiguous states to conduct the spatial analysis. The sdep package will be used to create a spatial weights matrix objects from the contiguous polygons of the 49 states, which will further allow the testing of spatial autocorrelation. 
+Point locations of unidentified aerial phenomenon sightings were obtained from the National UFO Reporting Center. The National UFO Reporting Center was founded in 1974 and has documented approximately 90,000 reported UFO sightings over its history, albeit mostly in the United States. The shapefile for the states will be obtained from the tigris package, which was filtered to obtain the 49 contiguous states to conduct the spatial analysis. The sdep package will be used to create a spatial weights matrix objects from the contiguous polygons of the 49 states, which will further allow the testing of spatial autocorrelation. 
 
-The package leaflet will also be used to visualize or map sightings of UAP from 1969. To aid in the processing of the overall the data and analysis, libraries such as tidyverse will be used. This package will facilitate the transformation and presentation of data by improving data import, "tidying", manipulating, and visualization of the data. The lubridate will be used to work with date-times and time-spans. it allows fast and user friendly parsing of date-time data, extraction and updating.   
+The package leaflet will also be used to visualize or map sightings of UAP from 1969 to 2022. To aid in the processing or wrangling of data and analysis, libraries such as tidyverse will be used. This package will facilitate the transformation and presentation of data, by supporting the importation, "tidying", manipulating, and visualization of the data. The lubridate library will be used to work with date-times and time-spans, as it allows fast and user friendly parsing of date-time data, extraction and updating.   
 
 ```{r, message=F, warning=F}
 library(tidyverse)
@@ -50,8 +50,6 @@ us_states = c('AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL',
               'VA', 'WA', 'WV', 'WI', 'WY', 'DC')
 
 US_map = US_map %>% filter(STUSPS %in% us_states)
-
-
 ```
 
 # Results
@@ -75,7 +73,7 @@ US_map %>%
 
 
 
-The bar chart shows that california has the highest number of sightings of UAP and Washington DC has the lowest number of sightings of UAP. 
+The bar chart shows that California has the highest number of sightings of UAP and Washington DC has the lowest number of sightings of UAP. 
 
 
 
@@ -96,9 +94,9 @@ uap %>% select(year, state) %>%  na.omit() %>%
   scale_x_continuous(breaks = seq(1969, 2022, 5))
 ```
 
-The line graph shows that UAP sightings started increasing dramatically since 1994, peaking in 2014. This was followed by a sharp drop in 2018, a sharp increase up to 2020 and then a drop up to 2022.   
+The line graph shows that UAP sightings started increasing dramatically since 1994, peaking in 2014. This was followed by a sharp drop in 2018, a sharp increase up to 2020 and then a drop leading up to 2022.   
 
-As first illustrated, there are major differences in the number of UAP sightings per state. To further the time series analysis, the number of sightings per year for every state was graphed. Note, each graph being plotted is limited to 10 state for better visualization and interpretation. 
+As first illustrated, there are major differences in the number of UAP sightings per state. To further the time series analysis and better understand how each state UAP sightings fluctuated over time, the number of UAP sightings per year for every state was plotted. Each graph being plotted was limited to 10 states for better visualization and interpretation. 
 
 ```{r, message = FALSE, warning = FALSE}
 uap %>% select(year, state) %>%  na.omit() %>% 
@@ -182,9 +180,9 @@ uap %>% select(year, state) %>%  na.omit() %>%
 ```
 
 
-In general, spatial data exhibit increasing range of values (increased spatial heterogeneity) with increased distance. Another way of saying this is refering to Waldo R. Tobler's first law of geography "everything is related to everything else, but near things are more related than distant things."
+In general, spatial data exhibit increasing range of values (i.e. increased spatial heterogeneity) with increased distance. Another way of saying this, is referring to Waldo R. Tobler's first law of geography "everything is related to everything else, but near things are more related than distant things."
 
-Spatial autocorrelation indicates if there is clustering or dispersion in a map. While a positive Moran's I indicate that the data is clustered, a negative Moran's I implies data is dispersed. In order to calculate spatial autocorrelation and also model spatial interaction, we need to impose a structure to constrain the number of neighbors to be considered. Subsequently, a "neighborhood matrix" will be constructed for the 49 contiguous US states, using the spdep package.
+Spatial autocorrelation indicates if there is clustering or dispersion in a map. While a positive Moran's I indicate that the data is clustered, a negative Moran's I implies data is dispersed. In order to calculate spatial autocorrelation and also model spatial interaction, we impose a structure to constrain the number of neighbors to be considered. Subsequently, a "neighborhood matrix" will be constructed for the 49 contiguous US states, using the spdep package.
 
 ```{r, message = FALSE, warning = FALSE}
 US_map_nb = poly2nb(US_map)
@@ -203,7 +201,7 @@ ggplot(US_map) +
   ggtitle('Contiguous US neighborhood structure')
 ```
 
-the Global Moran I is defined as:
+the Global Moran I is defined with the following formula:
 
 - $I = \frac{\sum_i\sum_jw_{ij}z_iz_j/S_0}{\sum_{i}z_i^2/n}$ where:
 
@@ -214,11 +212,12 @@ the Global Moran I is defined as:
 -   $S_0 = \sum_i\sum_jw_{ij}$ is the sum of all weights
 -   $w_{ij}$ is the weight of the neighbors. In this case $w_{ij} =1$ if areas $i$ and $j$ are neighbors and $w_{ij} = 0$ otherwise.
 
-The Global Moran I varies from -1 to 1, with -1 indicating strong negative spatial autocorrelation and 1 indicating strong positive spatial autocorrelation. For values near 0 there is no spatial autocorrelation, suggesting that the data is spatially random.
+The Global Moran I ranges from -1 to 1. -1 indicates a strong negative spatial autocorrelation and 1 indicates a strong positive spatial autocorrelation. For values near 0 there is no spatial autocorrelation, indicating that the data is spatially random.
 
-It is also possible to treat this statistic as a hypothesis test with the following hypothesis: $ H_0:\hbox{ The data is not spatially autocorrelated} \times H_1:\hbox{ The data is spatially autocorrelated} $
+Given the global moran I construct, this can be articulated in statistics as a hypothesis test with the following hypothesis: 
+$ H_0:\hbox{ UAP sightings are not spatially autocorrelated} \times H_1:\hbox{ UAP sightings are spatially autocorrelated} $
 
-A choropleth map will first be depicted to remind us of the spatial distribution of the UAP sightings from 1969 and then evaluate the spatial autocorrelation.
+To remind us of the spatial distribution of the UAP sightings from 1969 to 2022, a choropleth map will be presented and then a test for the spatial autocorrelation.
 
 ```{r, message = FALSE, warning = FALSE}
 labels <- sprintf(
