@@ -217,7 +217,7 @@ The Global Moran I ranges from -1 to 1. -1 indicates a strong negative spatial a
 
 Given the global moran I construct, this can be articulated in statistics as a hypothesis test with the following hypothesis: 
 
-- $ H_0:\hbox{ UAP sightings are not spatially autocorrelated} \times H_1: \hbox{ UAP sightings are spatially autocorrelated} $
+$H_0:\hbox{ UAP sightings are not spatially autocorrelated} \times H_1: \hbox{ UAP sightings are spatially autocorrelated}$ 
 
 To remind us of the spatial distribution of the UAP sightings from 1969 to 2022, a choropleth map will be presented and then a test for the spatial autocorrelation.
 
