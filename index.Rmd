@@ -56,7 +56,7 @@ US_map = US_map %>% filter(STUSPS %in% us_states)
 
 Before conducting the analysis, a bar chart was plotted to tabulate the total number of UAP sighting per state, to get a basic understanding of the data. 
 
-```{r, fig.width=8, fig.height=10, fig.cap="Number of UAPs per State"}
+```{r, fig.width=9, fig.height=10, fig.cap="fig. Number of UAPs per State"}
 US_uap = uap %>% filter(state %in% us_states) %>% group_by(state) %>% summarize(n = n()) 
 
 US_map = left_join(US_map, US_uap, by = c("STUSPS" = 'state'))
@@ -77,7 +77,7 @@ The bar chart shows that California has the highest number of sightings of UAP a
 
 
 
-To understand how the UAP sightings changed over time (i.e. a time series analysis), a line graph was plotted to visualize the number of UAP sightings per year.
+To understand how the aggregate UAP sightings changed over time (i.e. a time series analysis), a line graph was plotted to visualize the number of UAP sightings per year.
 
 ```{r, message = FALSE, warning = FALSE}
 uap$year = year(uap$date_time)
@@ -203,7 +203,8 @@ ggplot(US_map) +
 
 the Global Moran I is defined with the following formula:
 
-- $I = \frac{\sum_i\sum_jw_{ij}z_iz_j/S_0}{\sum_{i}z_i^2/n}$ where:
+I = 
+$\frac{\sum_i\sum_jw_{ij}z_iz_j/S_0}{\sum_{i}z_i^2/n}$ where:
 
 -   $z_i = x_i - \bar{x}$
 -   $x$ is the value of the variable on area $i$
@@ -215,7 +216,7 @@ the Global Moran I is defined with the following formula:
 The Global Moran I ranges from -1 to 1. -1 indicates a strong negative spatial autocorrelation and 1 indicates a strong positive spatial autocorrelation. For values near 0 there is no spatial autocorrelation, indicating that the data is spatially random.
 
 Given the global moran I construct, this can be articulated in statistics as a hypothesis test with the following hypothesis: 
-$ H_0:\hbox{ UAP sightings are not spatially autocorrelated} \times H_1:\hbox{ UAP sightings are spatially autocorrelated} $
+$ H_0:$ $\hbox{ UAP sightings are not spatially autocorrelated} \times$ $H_1:$ $\hbox{ UAP sightings are spatially autocorrelated} $
 
 To remind us of the spatial distribution of the UAP sightings from 1969 to 2022, a choropleth map will be presented and then a test for the spatial autocorrelation.
 
